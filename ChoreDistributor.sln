@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChoreDistributor.Console", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChoreDistributor.Business", "src\ChoreDistributor.Business\ChoreDistributor.Business.csproj", "{21FC6A3B-3156-4802-9D92-2082E3F7A304}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoreDistributor.Data", "src\ChoreDistributor.Data\ChoreDistributor.Data.csproj", "{5340AA13-CB7C-437F-857E-44FCBEB2ADB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChoreDistributor.Data", "src\ChoreDistributor.Data\ChoreDistributor.Data.csproj", "{5340AA13-CB7C-437F-857E-44FCBEB2ADB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoreDistributor.Models", "src\ChoreDistributor.Models\ChoreDistributor.Models.csproj", "{2CDA4CCE-B7B7-432D-9434-B59125BF0F3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChoreDistributor.Models", "src\ChoreDistributor.Models\ChoreDistributor.Models.csproj", "{2CDA4CCE-B7B7-432D-9434-B59125BF0F3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoreDistributor.UnitTest", "test\ChoreDistributor.UnitTest\ChoreDistributor.UnitTest.csproj", "{638234E2-D5BF-4BBE-8B68-82DB88A335CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2CDA4CCE-B7B7-432D-9434-B59125BF0F3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CDA4CCE-B7B7-432D-9434-B59125BF0F3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CDA4CCE-B7B7-432D-9434-B59125BF0F3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{638234E2-D5BF-4BBE-8B68-82DB88A335CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{638234E2-D5BF-4BBE-8B68-82DB88A335CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{638234E2-D5BF-4BBE-8B68-82DB88A335CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{638234E2-D5BF-4BBE-8B68-82DB88A335CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
