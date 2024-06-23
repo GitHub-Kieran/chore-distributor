@@ -50,9 +50,9 @@ while (isRunning)
             var chores = await repo.GetChores();
             var people = await repo.GetPeople();
 
-            var linearDistribution = new LinearDistribution();
+            var choreDistribution = new RandomDistribution();
 
-            var distributedChores = linearDistribution.Distribute(people, chores);
+            var distributedChores = choreDistribution.Distribute(people, chores);
 
             await repo.SaveDistributedChores(distributedChores);
 
@@ -83,11 +83,16 @@ while (isRunning)
 
             Console.WriteLine();
 
-            foreach (var dc in await repo.GetDistributedChore())
+            var dcs = await repo.GetDistributedChore();
+
+            var choreGroups = dcs.GroupBy(g => g.Person);
+            foreach (var item in choreGroups)
             {
-                Console.WriteLine(dc.Person.Name);
-                Console.WriteLine(dc.Chore.Name);
-                Console.WriteLine(dc.Chore.Weighting);
+                Console.WriteLine(item.Key.Name);
+                foreach (var dc in item)
+                {
+                    Console.WriteLine(dc.Chore.Name);
+                }
             }
 
             break;

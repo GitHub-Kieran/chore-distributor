@@ -5,10 +5,18 @@
     },
     {
         "Name": "Wash pots",
-        "Weighting": 6
+        "Weighting": 3
     },
     {
         "Name": "Take bins out",
+        "Weighting": 6
+    },
+    {
+        "Name": "Do the laundry",
+        "Weighting": 5
+    },
+    {
+        "Name": "Clean bathroom",
         "Weighting": 6
     }
 ]
