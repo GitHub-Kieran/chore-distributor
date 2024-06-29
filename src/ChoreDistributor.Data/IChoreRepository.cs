@@ -8,12 +8,12 @@ namespace ChoreDistributor.Data
 
         Task<IList<Person>> GetPeople();
 
-        Task<IList<DistributedChore>> GetDistributedChore();
+        Task<IList<KeyValuePair<Person, IList<Chore>>>> GetDistributedChores();
 
         Task AddChore(Chore chore);
 
         Task AddPerson(Person person);
 
-        Task SaveDistributedChores(IList<DistributedChore> distributedChores);
+        Task SaveDistributedChores(IList<KeyValuePair<Person, IList<Chore>>> distributedChores);
     }
 }

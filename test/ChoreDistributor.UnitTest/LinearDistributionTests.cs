@@ -25,7 +25,7 @@ namespace ChoreDistributor.UnitTest
             Assert.Multiple(() =>
             {
                 Assert.That(actual.Count, Is.EqualTo(1));
-                Assert.That(actual.First().Person.Name, Is.EqualTo(expectedPerson));
+                Assert.That(actual.First().Key.Name, Is.EqualTo(expectedPerson));
             });
         }
 
@@ -42,7 +42,7 @@ namespace ChoreDistributor.UnitTest
                 Assert.That(actual.Count, Is.EqualTo(3));
                 foreach (var person in people)
                 {
-                    Assert.True(actual.Any(dc => dc.Person.Name == person.Name));
+                    Assert.True(actual.Any(dc => dc.Key.Name == person.Name));
                 }
             });
         }
@@ -50,7 +50,9 @@ namespace ChoreDistributor.UnitTest
         [Test]
         public void Distribute_ChoresToPeople_LinearlyEqual()
         {
-            var people = new List<Person> { new("Foo"), new("Bar") };
+            var foo = new Person("Foo");
+            var bar = new Person("Bar");
+            var people = new List<Person> { foo, bar };
             var chores = new List<Chore>
             { 
                 new("Hoover", 6),
@@ -66,24 +68,20 @@ namespace ChoreDistributor.UnitTest
 
             Assert.Multiple(() =>
             {
-                var actualFooCount = 0;
-                var actualBarCount = 0;
-
-                foreach (var distributedChore in actual)
+                var actualFooChores = actual[foo];
+                foreach (var fooChore in expectedFooChores)
                 {
-                    if (distributedChore.Person.Name == "Foo")
-                    {
-                        actualFooCount++;
-                        Assert.IsTrue(expectedFooChores.Contains(distributedChore.Chore.Name));
-                    }
-                    else
-                    {
-                        actualBarCount++;
-                        Assert.IsTrue(expectedBarChores.Contains(distributedChore.Chore.Name));
-                    }
+                    Assert.IsTrue(actualFooChores.Any(c => c.Name == fooChore));
                 }
-                Assert.That(expectedFooChores.Count, Is.EqualTo(actualFooCount));
-                Assert.That(expectedBarChores.Count, Is.EqualTo(actualBarCount));
+
+                var actualBarChores = actual[bar];
+                foreach (var barChore in expectedBarChores)
+                {
+                    Assert.IsTrue(actualBarChores.Any(c => c.Name == barChore));
+                }
+
+                Assert.That(expectedFooChores.Count, Is.EqualTo(actualFooChores.Count));
+                Assert.That(expectedBarChores.Count, Is.EqualTo(actualBarChores.Count));
             });
         }
     }

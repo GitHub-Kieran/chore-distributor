@@ -31,15 +31,12 @@ namespace ChoreDistributor.Data
             return person;
         }
 
-        public async Task<IList<DistributedChore>> GetDistributedChore()
+        public async Task<IList<KeyValuePair<Person, IList<Chore>>>> GetDistributedChores()
         {
-            var distributedChores = new List<DistributedChore>();
+            var distributedChores = new List<KeyValuePair<Person, IList<Chore>>>();
             await using (var readStream = File.Open("distributedChores.json", FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                await foreach (var item in JsonSerializer.DeserializeAsyncEnumerable<DistributedChore>(readStream))
-                {
-                    distributedChores.Add(item ?? throw new NullReferenceException(nameof(item)));
-                }
+                distributedChores = await JsonSerializer.DeserializeAsync<List<KeyValuePair<Person, IList<Chore>>>>(readStream);
             }
             return distributedChores;
         }
@@ -66,7 +63,7 @@ namespace ChoreDistributor.Data
             }
         }
 
-        public async Task SaveDistributedChores(IList<DistributedChore> distributedChores)
+        public async Task SaveDistributedChores(IList<KeyValuePair<Person, IList<Chore>>> distributedChores)
         {
             await using (var fs = File.Open("distributedChores.json", FileMode.Create, FileAccess.Write, FileShare.Write))
             {
