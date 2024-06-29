@@ -4,6 +4,6 @@ namespace ChoreDistributor.Business
 {
     public interface IChoreDistribution
     {
-        IList<DistributedChore> Distribute(IList<Person> people, IList<Chore> chores);
+        IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores);
     }
 }

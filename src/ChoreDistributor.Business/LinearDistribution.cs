@@ -1,4 +1,5 @@
 ﻿using ChoreDistributor.Models;
+using System;
 
 namespace ChoreDistributor.Business
 {
@@ -8,9 +9,9 @@ namespace ChoreDistributor.Business
     /// </summary>
     public class LinearDistribution : IChoreDistribution
     {
-        public IList<DistributedChore> Distribute(IList<Person> people, IList<Chore> chores)
+        public IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores)
         {
-            var distributedChores = new List<DistributedChore>();
+            var distributedChores = new Dictionary<Person, IList<Chore>>();
 
             var total = chores.Sum(c => c.Weighting);
 
@@ -18,19 +19,24 @@ namespace ChoreDistributor.Business
 
             var x = 0;
 
-            foreach (var p in people)
+            foreach (var person in people)
             {
                 var personTotalWeight = 0f;
 
                 for (var j = x; j < chores.Count; ++j)
                 {
-                    var c = chores[j];
-                    var weight = c.Weighting;
+                    var chore = chores[j];
+                    var weight = chore.Weighting;
                     personTotalWeight += weight;
 
-                    var distributedChore = new DistributedChore(p, c);
-
-                    distributedChores.Add(distributedChore);
+                    if (distributedChores.ContainsKey(person))
+                    {
+                        distributedChores[person].Add(chore);
+                    }
+                    else
+                    {
+                        distributedChores.Add(person, new List<Chore> { chore });
+                    }
 
                     if (personTotalWeight >= averageDistribtion)
                     {

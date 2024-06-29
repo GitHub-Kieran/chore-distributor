@@ -4,11 +4,9 @@ namespace ChoreDistributor.Business
 {
     public sealed class RandomDistribution : IChoreDistribution
     {
-        // TODO: Person is duplicated. Remove the duplication that occurs when creating a distributed chore for memory efficiency, and displaying ease
-        // e.g. DistributedChores(Person, Chores) or dictionary instead
-        public IList<DistributedChore> Distribute(IList<Person> people, IList<Chore> chores)
+        public IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores)
         {
-            var distributedChores = new List<DistributedChore>();
+            var distributedChores = new Dictionary<Person, IList<Chore>>();
             var random = new Random();
 
             var currentPeople = new List<Person>();
@@ -28,8 +26,14 @@ namespace ChoreDistributor.Business
                 var chore = chores[choreIndex];
                 chores.RemoveAt(choreIndex);
 
-                var distributedChore = new DistributedChore(person, chore);
-                distributedChores.Add(distributedChore);                               
+                if (distributedChores.ContainsKey(person))
+                {
+                    distributedChores[person].Add(chore);
+                }
+                else
+                {
+                    distributedChores.Add(person, [chore]);
+                }              
 
                 if (chores.Count == 0)
                 {

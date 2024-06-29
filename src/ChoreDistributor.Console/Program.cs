@@ -54,7 +54,7 @@ while (isRunning)
 
             var distributedChores = choreDistribution.Distribute(people, chores);
 
-            await repo.SaveDistributedChores(distributedChores);
+            await repo.SaveDistributedChores(distributedChores.ToList());
 
             Console.WriteLine();
             Console.WriteLine("Chores distributed.");
@@ -83,15 +83,14 @@ while (isRunning)
 
             Console.WriteLine();
 
-            var dcs = await repo.GetDistributedChore();
+            var dcs = await repo.GetDistributedChores();
 
-            var choreGroups = dcs.GroupBy(g => g.Person);
-            foreach (var item in choreGroups)
+            foreach (var dc in dcs)
             {
-                Console.WriteLine(item.Key.Name);
-                foreach (var dc in item)
+                Console.WriteLine(dc.Key.Name);
+                foreach (var c in dc.Value)
                 {
-                    Console.WriteLine(dc.Chore.Name);
+                    Console.WriteLine(c.Name);
                 }
             }
 
