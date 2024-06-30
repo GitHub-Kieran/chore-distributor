@@ -19,7 +19,7 @@ namespace ChoreDistributor.Business
 
             var averageDistribtion = total / people.Count;
 
-            var closestMatches = new Dictionary<int, List<Chore>>();
+            var closestMatches = new List<List<Chore>>();
                 
             var remainingChores = chores;
             for (int i = 0; i < people.Count; i++)
@@ -44,14 +44,29 @@ namespace ChoreDistributor.Business
                     }
                 }
 
-                closestMatches.Add(i, bestCombination);
+                closestMatches.Add(bestCombination);
 
                 remainingChores = remainingChores.Except(bestCombination).ToList();
             }
-            // TODO: Randomise
-            for (int i = 0; i < people.Count; i++)
+
+            var distributing = true;
+            var peopleCopy = new List<Person>(people);
+            while (distributing)
             {
-                distributedChores.Add(people[i] , closestMatches[i]);
+                var peopleIndex = random.Next(0, peopleCopy.Count -1);
+                var person = peopleCopy[peopleIndex];
+                peopleCopy.RemoveAt(peopleIndex);
+
+                var closestMatchesIndex = random.Next(0, closestMatches.Count - 1); 
+                var closestMatch = closestMatches[closestMatchesIndex];
+                closestMatches.RemoveAt(closestMatchesIndex);
+
+                distributedChores.Add(person, closestMatch);
+
+                if (closestMatches.Count == 0)
+                {
+                    distributing = false;
+                }
             }
 
             return distributedChores;
