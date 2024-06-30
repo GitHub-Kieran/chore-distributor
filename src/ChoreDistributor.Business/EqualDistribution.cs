@@ -2,6 +2,11 @@
 
 namespace ChoreDistributor.Business
 {
+    /// <summary>
+    /// Find the fairest combination of chores for each person, based on the weight of each chore.
+    /// For example, given 5 chores with a combined weight of 38, and 2 people, each person would recieve
+    /// a combination of chores with a summed weight closest to 19.
+    /// </summary>
     public sealed class EqualDistribution : IChoreDistribution
     {
         public IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores)
@@ -43,8 +48,6 @@ namespace ChoreDistributor.Business
 
                 remainingChores = remainingChores.Except(bestCombination).ToList();
             }
-            // TODO: Add class descriptions
-            // TODO: Add readme descriptions
             // TODO: Randomise
             for (int i = 0; i < people.Count; i++)
             {

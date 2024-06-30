@@ -2,6 +2,9 @@
 
 namespace ChoreDistributor.Business
 {
+    /// <summary>
+    /// Randomly choose chores for people. There is no consideration of chore weight.
+    /// </summary>
     public sealed class RandomDistribution : IChoreDistribution
     {
         public IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores)
