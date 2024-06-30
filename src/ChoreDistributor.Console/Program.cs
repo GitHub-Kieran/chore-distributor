@@ -50,7 +50,7 @@ while (isRunning)
             var chores = await repo.GetChores();
             var people = await repo.GetPeople();
 
-            var choreDistribution = new RandomDistribution();
+            var choreDistribution = new EqualDistribution();
 
             var distributedChores = choreDistribution.Distribute(people, chores);
 
@@ -87,10 +87,10 @@ while (isRunning)
 
             foreach (var dc in dcs)
             {
-                Console.WriteLine(dc.Key.Name);
+                Console.WriteLine($"Person : '{dc.Key.Name}'");
                 foreach (var c in dc.Value)
                 {
-                    Console.WriteLine(c.Name);
+                    Console.WriteLine($"Chore : '{c.Name}' -- Weight: '{c.Weighting}'");
                 }
             }
 
@@ -101,7 +101,7 @@ while (isRunning)
     Console.WriteLine("Do you want to select another option? (y/n)");
 
     var again = Console.ReadKey();
-    if (again.KeyChar != 'y')
+    if (again.KeyChar == 'n')
     {
         isRunning = false;
     }
