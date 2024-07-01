@@ -50,7 +50,7 @@ while (isRunning)
             var chores = await repo.GetChores();
             var people = await repo.GetPeople();
 
-            var choreDistribution = new EqualDistribution();
+            var choreDistribution = new IncomeDistribution();
 
             var distributedChores = choreDistribution.Distribute(people, chores);
 

@@ -3,7 +3,7 @@ using ChoreDistributor.Models;
 
 namespace ChoreDistributor.UnitTest
 {
-    public class EqualDistributionTests
+    internal sealed class EqualDistributionTests
     {
         private EqualDistribution _choreDistribtion;
 

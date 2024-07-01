@@ -1,28 +1,35 @@
 ﻿using ChoreDistributor.Models;
+using System;
 
 namespace ChoreDistributor.Business
 {
-    /// <summary>
-    /// Find the fairest combination of chores for each person, based on the weight of each chore.
-    /// For example, given 5 chores with a combined weight of 38, and 2 people, each person would recieve
-    /// a combination of chores with a summed weight closest to 19.
-    /// </summary>
-    public sealed class EqualDistribution : IChoreDistribution
+    public sealed class IncomeDistribution : IChoreDistribution
     {
         public IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores)
         {
             var distributedChores = new Dictionary<Person, IList<Chore>>();
 
-            var random = new Random(); // TODO: Make random testable by using an interface for normal and seeded versions (unit testing)
-            
-            var total = chores.Sum(c => c.Weighting);
+            var totalIncome = people.Sum(p => p.Income);
+            var totalWeight = chores.Sum(c => c.Weighting);
 
-            var averageDistribtion = total / people.Count;
+            var enrichedPeople = new List<EnrichedPerson>();
+            foreach (var person in people) // TODO: Do we need this loop?
+            {
+                var percentageContribution = person.Income / totalIncome;
+                var choreContribution = totalWeight * (1 - percentageContribution);
 
+                if (percentageContribution * people.Count == 1)
+                {
+                    // Its equal and we need to randomise closest matches
+                }
+
+                enrichedPeople.Add(new EnrichedPerson(person, choreContribution));
+            }
             var closestMatches = new List<List<Chore>>();
-                
+
+            // TODO: refactor into EqualDistribution code
             var remainingChores = chores;
-            for (int i = 0; i < people.Count; i++)
+            for (int i = 0; i < enrichedPeople.Count; i++)
             {
                 var index = 0;
                 var indexes = remainingChores.Select(c => index++).ToList();
@@ -35,38 +42,18 @@ namespace ChoreDistributor.Business
                 foreach (var combination in linqCombinations)
                 {
                     var combinationWeight = combination.Sum(index => remainingChores[index].Weighting);
-                    var difference = Math.Abs(combinationWeight - averageDistribtion);
+                    var difference = Math.Abs(combinationWeight - enrichedPeople[i].ChoreContribution);
 
                     if (difference <= minDifference)
                     {
                         minDifference = difference;
                         bestCombination = combination.Select(index => remainingChores[index]).ToList();
                     }
-                }
+                }                             
                 remainingChores = remainingChores.Except(bestCombination).ToList();
 
-                closestMatches.Add(bestCombination);
-            }
-
-            var distributing = true;
-            var peopleCopy = new List<Person>(people);
-            while (distributing)
-            {
-                var peopleIndex = random.Next(0, peopleCopy.Count -1);
-                var person = peopleCopy[peopleIndex];
-                peopleCopy.RemoveAt(peopleIndex);
-
-                var closestMatchesIndex = random.Next(0, closestMatches.Count - 1); 
-                var closestMatch = closestMatches[closestMatchesIndex];
-                closestMatches.RemoveAt(closestMatchesIndex);
-
-                distributedChores.Add(person, closestMatch);
-
-                if (closestMatches.Count == 0)
-                {
-                    distributing = false;
-                }
-            }
+                distributedChores.Add(enrichedPeople[i].Person, bestCombination);
+            }            
 
             return distributedChores;
         }
@@ -85,6 +72,18 @@ namespace ChoreDistributor.Business
                 .Select(m => Enumerable.Range(0, elements.Count)
                     .Where(i => (m & (1 << i)) != 0)
                     .Select(i => elements[i]));
+        }
+
+        private class EnrichedPerson
+        {
+            public Person Person { get; }
+            public float ChoreContribution { get; set; }
+
+            public EnrichedPerson(Person person, float choreContribution)
+            {
+                Person = person;
+                ChoreContribution = choreContribution;
+            }
         }
     }
 }
