@@ -1,4 +1,5 @@
-﻿using ChoreDistributor.Models;
+﻿using ChoreDistributor.Business.Extensions;
+using ChoreDistributor.Models;
 
 namespace ChoreDistributor.Business
 {
@@ -27,7 +28,7 @@ namespace ChoreDistributor.Business
                 var index = 0;
                 var indexes = remainingChores.Select(c => index++).ToList();
 
-                var linqCombinations = GetCombinations(indexes);
+                var linqCombinations = indexes.GetCombinations();
 
                 var bestCombination = new List<Chore>();
                 var minDifference = float.MaxValue;
@@ -48,6 +49,8 @@ namespace ChoreDistributor.Business
                 closestMatches.Add(bestCombination);
             }
 
+            // TODO: change this so that bestCombination is added to distributedChores like
+            // distributedChores.Add(people[i], bestCombination); and randomise distributedChores instead
             var distributing = true;
             var peopleCopy = new List<Person>(people);
             while (distributing)
@@ -69,22 +72,6 @@ namespace ChoreDistributor.Business
             }
 
             return distributedChores;
-        }
-
-        /// <summary>
-        /// We need to try every combination of chores to find the fairest combinations
-        /// The array [ 0, 1, 2, 3, 4 ] representing chore indexes becomes something like the following:
-        /// [ [0], [1], [2], [0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [0, 1, 2], [0, 1, 3], [0, 1, 4], [1, 2, 3], [1, 2, 4], [0, 1, 2, 3] ]   
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="elements"></param>
-        /// <returns>IEnumerable<IEnumerable<T>></returns>
-        public static IEnumerable<IEnumerable<T>> GetCombinations<T>(IList<T> elements)
-        {
-            return Enumerable.Range(0, 1 << elements.Count)
-                .Select(m => Enumerable.Range(0, elements.Count)
-                    .Where(i => (m & (1 << i)) != 0)
-                    .Select(i => elements[i]));
         }
     }
 }

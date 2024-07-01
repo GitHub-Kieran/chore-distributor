@@ -1,4 +1,5 @@
-﻿using ChoreDistributor.Models;
+﻿using ChoreDistributor.Business.Extensions;
+using ChoreDistributor.Models;
 using System;
 
 namespace ChoreDistributor.Business
@@ -12,29 +13,24 @@ namespace ChoreDistributor.Business
             var totalIncome = people.Sum(p => p.Income);
             var totalWeight = chores.Sum(c => c.Weighting);
 
-            var enrichedPeople = new List<EnrichedPerson>();
-            foreach (var person in people) // TODO: Do we need this loop?
+            var randomise = false;
+            // TODO: refactor into EqualDistribution code
+            var remainingChores = chores;
+            for (int i = 0; i < people.Count; i++)
             {
-                var percentageContribution = person.Income / totalIncome;
+                var percentageContribution = people[i].Income / totalIncome;
                 var choreContribution = totalWeight * (1 - percentageContribution);
 
                 if (percentageContribution * people.Count == 1)
                 {
-                    // Its equal and we need to randomise closest matches
+                    // Each person contributes equally and we need to randomise closest matches
+                    randomise = true;
                 }
 
-                enrichedPeople.Add(new EnrichedPerson(person, choreContribution));
-            }
-            var closestMatches = new List<List<Chore>>();
-
-            // TODO: refactor into EqualDistribution code
-            var remainingChores = chores;
-            for (int i = 0; i < enrichedPeople.Count; i++)
-            {
                 var index = 0;
                 var indexes = remainingChores.Select(c => index++).ToList();
 
-                var linqCombinations = GetCombinations(indexes);
+                var linqCombinations = indexes.GetCombinations();
 
                 var bestCombination = new List<Chore>();
                 var minDifference = float.MaxValue;
@@ -42,7 +38,7 @@ namespace ChoreDistributor.Business
                 foreach (var combination in linqCombinations)
                 {
                     var combinationWeight = combination.Sum(index => remainingChores[index].Weighting);
-                    var difference = Math.Abs(combinationWeight - enrichedPeople[i].ChoreContribution);
+                    var difference = Math.Abs(combinationWeight - choreContribution);
 
                     if (difference <= minDifference)
                     {
@@ -52,38 +48,11 @@ namespace ChoreDistributor.Business
                 }                             
                 remainingChores = remainingChores.Except(bestCombination).ToList();
 
-                distributedChores.Add(enrichedPeople[i].Person, bestCombination);
+                distributedChores.Add(people[i], bestCombination);
             }            
 
             return distributedChores;
         }
 
-        /// <summary>
-        /// We need to try every combination of chores to find the fairest combinations
-        /// The array [ 0, 1, 2, 3, 4 ] representing chore indexes becomes something like the following:
-        /// [ [0], [1], [2], [0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [0, 1, 2], [0, 1, 3], [0, 1, 4], [1, 2, 3], [1, 2, 4], [0, 1, 2, 3] ]   
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="elements"></param>
-        /// <returns>IEnumerable<IEnumerable<T>></returns>
-        public static IEnumerable<IEnumerable<T>> GetCombinations<T>(IList<T> elements)
-        {
-            return Enumerable.Range(0, 1 << elements.Count)
-                .Select(m => Enumerable.Range(0, elements.Count)
-                    .Where(i => (m & (1 << i)) != 0)
-                    .Select(i => elements[i]));
-        }
-
-        private class EnrichedPerson
-        {
-            public Person Person { get; }
-            public float ChoreContribution { get; set; }
-
-            public EnrichedPerson(Person person, float choreContribution)
-            {
-                Person = person;
-                ChoreContribution = choreContribution;
-            }
-        }
     }
 }
