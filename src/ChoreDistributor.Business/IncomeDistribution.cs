@@ -1,6 +1,7 @@
 ﻿using ChoreDistributor.Business.Extensions;
 using ChoreDistributor.Models;
 using System;
+using System.Collections.Generic;
 
 namespace ChoreDistributor.Business
 {
@@ -49,7 +50,17 @@ namespace ChoreDistributor.Business
                 remainingChores = remainingChores.Except(bestCombination).ToList();
 
                 distributedChores.Add(people[i], bestCombination);
-            }            
+            }
+
+            if (randomise)
+            {
+                var shuffledChores = distributedChores.Values.OrderBy(_ => Guid.NewGuid()).ToList();
+
+                for (int i = 0; i < people.Count; i++)
+                {
+                    distributedChores[people[i]] = shuffledChores[i];
+                }
+            }
 
             return distributedChores;
         }
