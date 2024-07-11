@@ -1,12 +1,18 @@
 ﻿using ChoreDistributor.Business.Extensions;
+using ChoreDistributor.Business.Factories;
 using ChoreDistributor.Models;
-using System;
-using System.Collections.Generic;
 
 namespace ChoreDistributor.Business
 {
     public sealed class IncomeDistribution : IChoreDistribution
     {
+        private readonly IRandomFactory _randomFactory;
+
+        public IncomeDistribution(IRandomFactory randomFactory)
+        {
+            _randomFactory = randomFactory;
+        }
+
         public IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores)
         {
             var distributedChores = new Dictionary<Person, IList<Chore>>();
@@ -54,7 +60,8 @@ namespace ChoreDistributor.Business
 
             if (randomise)
             {
-                var shuffledChores = distributedChores.Values.OrderBy(_ => Guid.NewGuid()).ToList();
+                var random = _randomFactory.Create();
+                var shuffledChores = distributedChores.Values.OrderBy(_ => random.Next(0, distributedChores.Values.Count)).ToList();
 
                 for (int i = 0; i < people.Count; i++)
                 {

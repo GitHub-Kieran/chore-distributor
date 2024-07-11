@@ -1,4 +1,5 @@
 ﻿using ChoreDistributor.Business;
+using ChoreDistributor.Business.Factories;
 using ChoreDistributor.Data;
 using ChoreDistributor.Models;
 
@@ -50,7 +51,7 @@ while (isRunning)
             var chores = await repo.GetChores();
             var people = await repo.GetPeople();
 
-            var choreDistribution = new IncomeDistribution();
+            var choreDistribution = new IncomeDistribution(new RandomFactory());
 
             var distributedChores = choreDistribution.Distribute(people, chores);
 
