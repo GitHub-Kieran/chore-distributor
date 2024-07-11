@@ -38,7 +38,7 @@ namespace ChoreDistributor.Data
             {
                 distributedChores = await JsonSerializer.DeserializeAsync<List<KeyValuePair<Person, IList<Chore>>>>(readStream);
             }
-            return distributedChores;
+            return distributedChores ?? [];
         }
 
         public async Task AddChore(Chore chore)

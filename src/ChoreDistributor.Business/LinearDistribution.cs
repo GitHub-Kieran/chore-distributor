@@ -34,7 +34,7 @@ namespace ChoreDistributor.Business
                     }
                     else
                     {
-                        distributedChores.Add(person, new List<Chore> { chore });
+                        distributedChores.Add(person, [chore]);
                     }
 
                     if (personTotalWeight >= averageDistribtion)
