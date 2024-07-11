@@ -1,4 +1,5 @@
 ﻿using ChoreDistributor.Business.Extensions;
+using ChoreDistributor.Business.Factories;
 using ChoreDistributor.Models;
 
 namespace ChoreDistributor.Business
@@ -10,12 +11,19 @@ namespace ChoreDistributor.Business
     /// </summary>
     public sealed class EqualDistribution : IChoreDistribution
     {
+        private readonly IRandomFactory _randomFactory;
+
+        public EqualDistribution(IRandomFactory randomFactory)
+        {
+            _randomFactory = randomFactory;
+        }
+
         public IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores)
         {
             var distributedChores = new Dictionary<Person, IList<Chore>>();
 
-            var random = new Random(); // TODO: Make random testable by using an interface for normal and seeded versions (unit testing)
-            
+            var random = _randomFactory.Create();
+
             var total = chores.Sum(c => c.Weighting);
 
             var averageDistribtion = total / people.Count;
