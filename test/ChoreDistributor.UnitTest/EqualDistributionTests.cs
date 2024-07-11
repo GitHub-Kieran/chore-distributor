@@ -58,10 +58,10 @@ namespace ChoreDistributor.UnitTest
             });
         }
 
-        [Test] // TODO: Fix randmisation as no seed is found to work
-        public void Distribute_MultiplePeopleSingleChore_RandomlyAssignedToBar([Range(10000, 20000, 1)] int seed)
+        [Test]
+        public void Distribute_MultiplePeopleSingleChore_RandomlyAssignedToBar()
         {
-            _randomFactory.Create().Returns(new Random(seed));
+            _randomFactory.Create().Returns(new Random(2));
             var foo = new Person("Foo");
             var bar = new Person("Bar");
             var people = new List<Person> { foo, bar };

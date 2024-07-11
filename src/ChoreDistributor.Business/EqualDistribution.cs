@@ -22,13 +22,8 @@ namespace ChoreDistributor.Business
         {
             var distributedChores = new Dictionary<Person, IList<Chore>>();
 
-            var random = _randomFactory.Create();
-
-            var total = chores.Sum(c => c.Weighting);
-
-            var averageDistribtion = total / people.Count;
-
-            var closestMatches = new List<List<Chore>>();
+            var totalWeight = chores.Sum(c => c.Weighting);
+            var averageDistribtion = totalWeight / people.Count;
                 
             var remainingChores = chores;
             for (int i = 0; i < people.Count; i++)
@@ -54,28 +49,17 @@ namespace ChoreDistributor.Business
                 }
                 remainingChores = remainingChores.Except(bestCombination).ToList();
 
-                closestMatches.Add(bestCombination);
+                distributedChores.Add(people[i], bestCombination);
             }
 
-            // TODO: change this so that bestCombination is added to distributedChores like
-            // distributedChores.Add(people[i], bestCombination); and randomise distributedChores instead
-            var distributing = true;
-            var peopleCopy = new List<Person>(people);
-            while (distributing)
+            if (true)
             {
-                var peopleIndex = random.Next(0, peopleCopy.Count -1);
-                var person = peopleCopy[peopleIndex];
-                peopleCopy.RemoveAt(peopleIndex);
+                var random = _randomFactory.Create();
+                var shuffledChores = distributedChores.Values.OrderBy(_ => random.Next(0, distributedChores.Values.Count)).ToList();
 
-                var closestMatchesIndex = random.Next(0, closestMatches.Count - 1); 
-                var closestMatch = closestMatches[closestMatchesIndex];
-                closestMatches.RemoveAt(closestMatchesIndex);
-
-                distributedChores.Add(person, closestMatch);
-
-                if (closestMatches.Count == 0)
+                for (int i = 0; i < people.Count; i++)
                 {
-                    distributing = false;
+                    distributedChores[people[i]] = shuffledChores[i];
                 }
             }
 
