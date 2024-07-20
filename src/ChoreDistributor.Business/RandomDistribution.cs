@@ -1,4 +1,5 @@
-﻿using ChoreDistributor.Models;
+﻿using ChoreDistributor.Business.Factories;
+using ChoreDistributor.Models;
 
 namespace ChoreDistributor.Business
 {
@@ -7,10 +8,17 @@ namespace ChoreDistributor.Business
     /// </summary>
     public sealed class RandomDistribution : IChoreDistribution
     {
+        private readonly IRandomFactory _randomFactory;
+
+        public RandomDistribution(IRandomFactory randomFactory)
+        {
+            _randomFactory = randomFactory;
+        }
+
         public IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores)
         {
             var distributedChores = new Dictionary<Person, IList<Chore>>();
-            var random = new Random();
+            var random = _randomFactory.Create();
 
             var currentPeople = new List<Person>();
             var distributing = true;

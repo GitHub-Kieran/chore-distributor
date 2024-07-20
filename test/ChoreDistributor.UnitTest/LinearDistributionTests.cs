@@ -3,7 +3,7 @@ using ChoreDistributor.Models;
 
 namespace ChoreDistributor.UnitTest
 {
-    public class LinearDistributionTests
+    internal sealed class LinearDistributionTests
     {
         private IChoreDistribution _choreDistribtion;
 

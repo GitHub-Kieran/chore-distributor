@@ -1,8 +1,10 @@
 [
     {
-        "Name": "John"
+        "Name": "John",
+        "Income": 70000
     },
     {
-        "Name": "Beth"
+        "Name": "Beth",
+        "Income": 34000
     }
 ]

@@ -22,9 +22,9 @@ Find the fairest combination of chores for each person, based on the weight of e
 For example, given 5 chores with a combined weight of 38, and 2 people, each person would recieve
 a combination of chores with a summed weight closest to 19.
 
-Coming soon:
+### Income Chore Distribution
 
-### Salary Chore Distribution
+Distribute chores based on peoples income.
 
 
 
