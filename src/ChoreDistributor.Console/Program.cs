@@ -51,7 +51,7 @@ while (isRunning)
             var chores = await repo.GetChores();
             var people = await repo.GetPeople();
 
-            var choreDistribution = new IncomeDistribution(new RandomFactory());
+            var choreDistribution = new IncomeDistribution(new RandomFactory(), new ChoreSearcher());
 
             var distributedChores = choreDistribution.Distribute(people, chores);
 

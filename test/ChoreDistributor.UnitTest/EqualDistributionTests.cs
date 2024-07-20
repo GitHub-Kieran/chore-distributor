@@ -15,7 +15,7 @@ namespace ChoreDistributor.UnitTest
         {
             _randomFactory = Substitute.For<IRandomFactory>();
             _randomFactory.Create().Returns(new Random());
-            _choreDistribtion = new EqualDistribution(_randomFactory);
+            _choreDistribtion = new EqualDistribution(_randomFactory, new ChoreSearcher());
         }
 
         [Test]
