@@ -1,7 +1,10 @@
 ﻿using ChoreDistributor.Business;
 using ChoreDistributor.Business.Factories;
+using ChoreDistributor.Console;
 using ChoreDistributor.Data;
 using ChoreDistributor.Models;
+
+var serviceProvider = Startup.RegisterServices();
 
 var options =
     @$"Select an option:
