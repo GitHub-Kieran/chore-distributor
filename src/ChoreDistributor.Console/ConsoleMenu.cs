@@ -20,31 +20,44 @@ namespace ChoreDistributor.Console
             5 --> Display people
             6 --> Display distributed chores";
 
-        private static readonly Dictionary<char, Action> __options = [];
+        private static readonly string __distributionOptionsMenu =
+            @$"Select an option:
+
+            1 --> Linear
+            2 --> Random
+            3 --> Equal
+            4 --> Income";
+
+        private static readonly Dictionary<char, Func<Task>> __options = [];
+        private static readonly Dictionary<char, ChoreDistributors> __distributionOptions = [];
 
         private static void InitialiseOptions(IServiceProvider serviceProvider)
         {
             var choreRepository = serviceProvider.GetRequiredService<IChoreRepository>();
             __options['1'] = async () => 
             {
-                Console.WriteLine();
-                Console.WriteLine("Enter chore name:");
-                var choreName = Console.ReadLine();
-                Console.WriteLine();
-                Console.WriteLine("Enter chore weighting:");
-                var choreWeighting = Console.ReadLine();
-                Console.WriteLine();
+                await Console.Out.WriteLineAsync();
+                await Console.Out.WriteLineAsync("Enter chore name:");
+                var choreName = await Console.In.ReadLineAsync();
+
+                await Console.Out.WriteLineAsync();
+                await Console.Out.WriteLineAsync("Enter chore weighting:");
+                var choreWeighting = await Console.In.ReadLineAsync();
 
                 var chore = new Chore(choreName ?? string.Empty, float.Parse(choreWeighting ?? "0"));
                 await choreRepository.AddChore(chore);
             };
             __options['2'] = async () =>
             {
-                Console.WriteLine();
-                Console.WriteLine("Enter person name:");
-                var personName = Console.ReadLine();
-                var person = new Person(personName ?? string.Empty);
+                await Console.Out.WriteLineAsync();
+                await Console.Out.WriteLineAsync("Enter persons name:");
+                var personName = await Console.In.ReadLineAsync();
 
+                await Console.Out.WriteLineAsync();
+                await Console.Out.WriteLineAsync("Enter persons income:");
+                var income = await Console.In.ReadLineAsync();
+
+                var person = new Person(personName ?? string.Empty, string.IsNullOrEmpty(income) ? 0 : float.TryParse(income ?? "0", out var parsedIncome) ? parsedIncome : 0);
                 await choreRepository.AddPerson(person);
             };
             __options['3'] = async () =>
@@ -52,86 +65,103 @@ namespace ChoreDistributor.Console
                 var chores = await choreRepository.GetChores();
                 var people = await choreRepository.GetPeople();
 
-                var choreDistribution = serviceProvider.GetRequiredKeyedService<IChoreDistribution>(ChoreDistributors.Income);
+                await Console.Out.WriteLineAsync();
+                await Console.Out.WriteLineAsync("What distribution method would you like to use?");
+                await Console.Out.WriteLineAsync(__distributionOptionsMenu);
 
-                var distributedChores = choreDistribution.Distribute(people, chores);
+                var distributionOptionKey = Console.ReadKey();
 
-                await choreRepository.SaveDistributedChores(distributedChores.ToList());
+                if (__distributionOptions.TryGetValue(distributionOptionKey.KeyChar, out var option))
+                {
+                    var choreDistribution = serviceProvider.GetRequiredKeyedService<IChoreDistribution>(option);
 
-                Console.WriteLine();
-                Console.WriteLine("Chores distributed.");
+                    var distributedChores = choreDistribution.Distribute(people, chores);
+
+                    await choreRepository.SaveDistributedChores(distributedChores.ToList());
+
+                    await Console.Out.WriteLineAsync();
+                    await Console.Out.WriteLineAsync("Chores distributed.");
+                }
+                else
+                {
+                    await Console.Out.WriteLineAsync();
+                    await Console.Out.WriteLineAsync("Invalid selection.");
+                }
             };
             __options['4'] = async () =>
             {
-                Console.WriteLine();
-
-                foreach (var c in await choreRepository.GetChores())
+                await Console.Out.WriteLineAsync();
+                foreach (var chore in await choreRepository.GetChores())
                 {
-                    Console.WriteLine(c.Name);
-                    Console.WriteLine(c.Weighting);
+                    await Console.Out.WriteLineAsync($"[Chore : '{chore.Name}' - Weight: '{chore.Weighting}']");
                 }
 
             };
             __options['5'] = async () =>
             {
-                Console.WriteLine();
-
-                foreach (var p in await choreRepository.GetPeople())
+                await Console.Out.WriteLineAsync();
+                foreach (var person in await choreRepository.GetPeople())
                 {
-                    Console.WriteLine(p.Name);
+                    await Console.Out.WriteLineAsync($"[Person : '{person.Name}' - Income: '{person.Income}']");
                 }
 
             };
             __options['6'] = async () =>
             {
-                Console.WriteLine();
-
-                var dcs = await choreRepository.GetDistributedChores();
-
-                foreach (var dc in dcs)
+                await Console.Out.WriteLineAsync();
+                foreach (var distributedChore in await choreRepository.GetDistributedChores())
                 {
-                    Console.WriteLine($"Person : '{dc.Key.Name}'");
-                    foreach (var chore in dc.Value)
+                    await Console.Out.WriteLineAsync($"Person : '{distributedChore.Key.Name}'");
+                    foreach (var chore in distributedChore.Value)
                     {
-                        Console.WriteLine($"Chore : '{chore.Name}' -- Weight: '{chore.Weighting}'");
+                        await Console.Out.WriteLineAsync($"[Chore : '{chore.Name}' - Weight: '{chore.Weighting}']");
                     }
                 }
             };
         }
 
-        public static void PrintOptionsMenu()
+        private static void InitialiseDistributionOptions()
         {
-            Console.WriteLine();
-            Console.WriteLine(__optionsMenu);
+            __distributionOptions.Add('1', ChoreDistributors.Linear);
+            __distributionOptions.Add('2', ChoreDistributors.Random);
+            __distributionOptions.Add('3', ChoreDistributors.Equal);
+            __distributionOptions.Add('4', ChoreDistributors.Income);
         }
 
-        public static void Run(IServiceProvider serviceProvider)
+        public static async Task PrintOptionsMenu()
+        {
+            await Console.Out.WriteLineAsync();
+            await Console.Out.WriteLineAsync(__optionsMenu);
+        }
+
+        public static async Task Run(IServiceProvider serviceProvider)
         {
             InitialiseOptions(serviceProvider);
+            InitialiseDistributionOptions();
 
             var isRunning = true;
             while (isRunning)
             {
                 var optionKey = Console.ReadKey();
-                if (__options.TryGetValue(optionKey.KeyChar, out Action option))
+                if (__options.TryGetValue(optionKey.KeyChar, out var option))
                 {
-                    option();
+                    await option();
 
-                    Console.WriteLine();
-                    Console.WriteLine("Do you want to select another option? (y/n)");
+                    await Console.Out.WriteLineAsync();
+                    await Console.Out.WriteLineAsync("Do you want to select another option? (y/n)");
 
                     var chooseAgain = Console.ReadKey();
-                    if (chooseAgain.KeyChar != 'y')
+                    if (chooseAgain.KeyChar == 'n')
                     {
                         isRunning = false;
                     }
 
-                    PrintOptionsMenu();
+                    await PrintOptionsMenu();
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("Invalid selection.");
+                    await Console.Out.WriteLineAsync();
+                    await Console.Out.WriteLineAsync("Invalid selection.");
                 }
             }
         }

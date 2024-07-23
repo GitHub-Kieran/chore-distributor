@@ -1,6 +1,6 @@
 ﻿using ChoreDistributor.Console;
 
-ConsoleMenu.PrintOptionsMenu();
+await ConsoleMenu.PrintOptionsMenu();
 
 var serviceProvider = Startup.RegisterServices();
-ConsoleMenu.Run(serviceProvider);
+await ConsoleMenu.Run(serviceProvider);
