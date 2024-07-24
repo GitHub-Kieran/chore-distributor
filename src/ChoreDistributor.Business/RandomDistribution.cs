@@ -6,7 +6,7 @@ namespace ChoreDistributor.Business
     /// <summary>
     /// Randomly choose chores for people. There is no consideration of chore weight.
     /// </summary>
-    public sealed class RandomDistribution : IChoreDistribution
+    internal sealed class RandomDistribution : IChoreDistribution
     {
         private readonly IRandomFactory _randomFactory;
 

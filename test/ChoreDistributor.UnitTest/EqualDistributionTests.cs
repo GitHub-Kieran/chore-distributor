@@ -21,8 +21,8 @@ namespace ChoreDistributor.UnitTest
         [Test]
         public void Distribute_MultiplePeopleSingleChore_RandomlyAssigned()
         {
-            var foo = new Person("Foo");
-            var bar = new Person("Bar");
+            var foo = new Person("Foo", 0);
+            var bar = new Person("Bar", 0);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1) };
 
@@ -42,8 +42,8 @@ namespace ChoreDistributor.UnitTest
         public void Distribute_MultiplePeopleSingleChore_RandomlyAssignedToFoo()
         {
             _randomFactory.Create().Returns(new Random(1));
-            var foo = new Person("Foo");
-            var bar = new Person("Bar");
+            var foo = new Person("Foo", 0);
+            var bar = new Person("Bar", 0);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1) };
 
@@ -62,8 +62,8 @@ namespace ChoreDistributor.UnitTest
         public void Distribute_MultiplePeopleSingleChore_RandomlyAssignedToBar()
         {
             _randomFactory.Create().Returns(new Random(2));
-            var foo = new Person("Foo");
-            var bar = new Person("Bar");
+            var foo = new Person("Foo", 0);
+            var bar = new Person("Bar", 0);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1) };
 
@@ -81,7 +81,7 @@ namespace ChoreDistributor.UnitTest
         [Test]
         public void Distribute_SameNumberOfChoresAsPeople_OneChoreEach()
         {
-            var people = new List<Person> { new("Name1"), new("Name2"), new("Name3") };
+            var people = new List<Person> { new("Name1", 0), new("Name2", 0), new("Name3", 0) };
             var chores = new List<Chore> { new("Chore1", 1), new("Chore2", 1), new("Chore3", 1 ) };
 
             var actual = _choreDistribtion.Distribute(people, chores);
@@ -112,8 +112,8 @@ namespace ChoreDistributor.UnitTest
 
         private static IEnumerable<ExactlyEqualTestCase> GetTestCases()
         {
-            var foo = new Person("Foo");
-            var bar = new Person("Bar");
+            var foo = new Person("Foo", 0);
+            var bar = new Person("Bar", 0);
             var twoPeople = new List<Person> { foo, bar };
             yield return new ExactlyEqualTestCase
             {
@@ -141,7 +141,7 @@ namespace ChoreDistributor.UnitTest
                 ],
                 ExpectedWeight = 8
             };
-            var threePeople = new List<Person>(twoPeople) { new("John") };
+            var threePeople = new List<Person>(twoPeople) { new("John", 0) };
             yield return new ExactlyEqualTestCase
             {
                 People = threePeople,

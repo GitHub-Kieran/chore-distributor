@@ -2,6 +2,6 @@
 {
     public interface IRandomFactory
     {
-        public Random Create();
+        Random Create();
     }
 }

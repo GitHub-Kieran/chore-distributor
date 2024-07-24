@@ -3,7 +3,7 @@ using ChoreDistributor.Models;
 
 namespace ChoreDistributor.Business
 {
-    public class ChoreSearcher : IChoreSearcher
+    internal sealed class ChoreSearcher : IChoreSearcher
     {
         public IList<Chore> FindBestCombinationForWeight(IList<Chore> chores, float choreContributionWeight)
         {

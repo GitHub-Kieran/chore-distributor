@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace ChoreDistributor.Data
 {
-    public class ChoreRepository : IChoreRepository
+    internal sealed class ChoreRepository : IChoreRepository
     {
         public async Task<IList<Chore>> GetChores()
         {

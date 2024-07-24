@@ -21,8 +21,8 @@ namespace ChoreDistributor.UnitTest
         [Test]
         public void Distribute_TwoPeopleSingleChore_LowestIncomeAssigned()
         {
-            var foo = new Person("Foo") { Income = 30000 };
-            var bar = new Person("Bar") { Income = 20000 };
+            var foo = new Person("Foo", 30000);
+            var bar = new Person("Bar", 20000);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1) };
 
@@ -40,8 +40,8 @@ namespace ChoreDistributor.UnitTest
         [Test]
         public void Distribute_TwoPeopleFiveEqualChores_LowestIncomeAssignedMore()
         {
-            var foo = new Person("Foo") { Income = 30000 };
-            var bar = new Person("Bar") { Income = 20000 };
+            var foo = new Person("Foo", 30000);
+            var bar = new Person("Bar", 20000);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1), new("Chore2", 1), new("Chore3", 1), new("Chore4", 1), new("Chore5", 1) };
 
@@ -60,8 +60,8 @@ namespace ChoreDistributor.UnitTest
         public void Distribute_TwoPeopleSameIncomeSingleChore_RandomlyAssignedToFoo()
         {
             _randomFactory.Create().Returns(new Random(1));
-            var foo = new Person("Foo") { Income = 30000 };
-            var bar = new Person("Bar") { Income = 30000 };
+            var foo = new Person("Foo", 30000);
+            var bar = new Person("Bar", 30000);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1) };
 
@@ -80,8 +80,8 @@ namespace ChoreDistributor.UnitTest
         public void Distribute_TwoPeopleSameIncomeSingleChore_RandomlyAssignedToBar()
         {
             _randomFactory.Create().Returns(new Random(2));
-            var foo = new Person("Foo") { Income = 30000 };
-            var bar = new Person("Bar") { Income = 30000 };
+            var foo = new Person("Foo", 30000);
+            var bar = new Person("Bar", 30000);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1) };
 
@@ -99,8 +99,8 @@ namespace ChoreDistributor.UnitTest
         [Test]
         public void Distribute_TwoPeopleSameIncomeFiveEqualChores_RandomlyAssignedMore()
         {
-            var foo = new Person("Foo") { Income = 30000 };
-            var bar = new Person("Bar") { Income = 30000 };
+            var foo = new Person("Foo", 30000);
+            var bar = new Person("Bar", 30000);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1), new("Chore2", 1), new("Chore3", 1), new("Chore4", 1), new("Chore5", 1) };
 
@@ -120,8 +120,8 @@ namespace ChoreDistributor.UnitTest
         public void Distribute_TwoPeopleSameIncomeFiveEqualChores_RandomlyAssignedMoreToFoo()
         {
             _randomFactory.Create().Returns(new Random(1));
-            var foo = new Person("Foo") { Income = 30000 };
-            var bar = new Person("Bar") { Income = 30000 };
+            var foo = new Person("Foo", 30000);
+            var bar = new Person("Bar", 30000);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1), new("Chore2", 1), new("Chore3", 1), new("Chore4", 1), new("Chore5", 1) };
 
@@ -140,8 +140,8 @@ namespace ChoreDistributor.UnitTest
         public void Distribute_TwoPeopleSameIncomeFiveEqualChores_RandomlyAssignedMoreToBar()
         {
             _randomFactory.Create().Returns(new Random(2));
-            var foo = new Person("Foo") { Income = 30000 };
-            var bar = new Person("Bar") { Income = 30000 };
+            var foo = new Person("Foo", 30000);
+            var bar = new Person("Bar", 30000);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore> { new("Chore1", 1), new("Chore2", 1), new("Chore3", 1), new("Chore4", 1), new("Chore5", 1) };
 
