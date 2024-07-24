@@ -6,7 +6,7 @@ namespace ChoreDistributor.Business
     /// Loop through all the chores in order and assign them to people in order of occurance.
     /// This method of chore distribution can result in unfair distribution if the chores are not already ordered in the preffered way.
     /// </summary>
-    public sealed class LinearDistribution : IChoreDistribution
+    internal sealed class LinearDistribution : IChoreDistribution
     {
         public IDictionary<Person, IList<Chore>> Distribute(IList<Person> people, IList<Chore> chores)
         {

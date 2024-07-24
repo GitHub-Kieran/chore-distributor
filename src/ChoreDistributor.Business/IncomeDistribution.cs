@@ -3,7 +3,7 @@ using ChoreDistributor.Models;
 
 namespace ChoreDistributor.Business
 {
-    public sealed class IncomeDistribution : IChoreDistribution
+    internal sealed class IncomeDistribution : IChoreDistribution
     {
         private readonly IRandomFactory _randomFactory;
         private readonly IChoreSearcher _choreSearcher;

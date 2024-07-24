@@ -1,6 +1,6 @@
-﻿namespace ChoreDistributor.Console
+﻿namespace ChoreDistributor.Business
 {
-    internal enum ChoreDistributors
+    public enum ChoreDistributors
     {
         Random,
         Linear,

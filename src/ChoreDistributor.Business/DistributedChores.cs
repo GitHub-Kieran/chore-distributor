@@ -2,7 +2,7 @@
 
 namespace ChoreDistributor.Business
 {
-    internal class DistributedChores : Dictionary<Person, IList<Chore>>, IDictionary<Person, IList<Chore>>
+    internal sealed class DistributedChores : Dictionary<Person, IList<Chore>>, IDictionary<Person, IList<Chore>>
     {
         public DistributedChores Randomise(Random random)
         {

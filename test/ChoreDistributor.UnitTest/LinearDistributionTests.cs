@@ -5,7 +5,7 @@ namespace ChoreDistributor.UnitTest
 {
     internal sealed class LinearDistributionTests
     {
-        private IChoreDistribution _choreDistribtion;
+        private LinearDistribution _choreDistribtion;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -17,7 +17,7 @@ namespace ChoreDistributor.UnitTest
         public void Distribute_MultiplePeopleSingleChore_FirstPersonAssigned()
         {
             var expectedPerson = "Name1";
-            var people = new List<Person> { new(expectedPerson), new("Name2") };
+            var people = new List<Person> { new(expectedPerson, 0), new("Name2", 0) };
             var chores = new List<Chore> { new("Chore1", 1) };
 
             var actual = _choreDistribtion.Distribute(people, chores);
@@ -32,7 +32,7 @@ namespace ChoreDistributor.UnitTest
         [Test]
         public void Distribute_SameNumberOfChoresAsPeople_OneChoreEach()
         {
-            var people = new List<Person> { new("Name1"), new("Name2"), new("Name3") };
+            var people = new List<Person> { new("Name1", 0), new("Name2", 0), new("Name3", 0) };
             var chores = new List<Chore> { new("Chore1", 1), new("Chore2", 1), new("Chore3", 1 ) };
 
             var actual = _choreDistribtion.Distribute(people, chores);
@@ -50,8 +50,8 @@ namespace ChoreDistributor.UnitTest
         [Test]
         public void Distribute_ChoresToPeople_LinearlyEqual()
         {
-            var foo = new Person("Foo");
-            var bar = new Person("Bar");
+            var foo = new Person("Foo", 0);
+            var bar = new Person("Bar", 0);
             var people = new List<Person> { foo, bar };
             var chores = new List<Chore>
             { 

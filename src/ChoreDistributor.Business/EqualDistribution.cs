@@ -8,7 +8,7 @@ namespace ChoreDistributor.Business
     /// For example, given 5 chores with a combined weight of 38, and 2 people, each person would recieve
     /// a combination of chores with a summed weight closest to 19.
     /// </summary>
-    public sealed class EqualDistribution : IChoreDistribution
+    internal sealed class EqualDistribution : IChoreDistribution
     {
         private readonly IRandomFactory _randomFactory;
         private readonly IChoreSearcher _choreSearcher;

@@ -1,6 +1,6 @@
 ﻿namespace ChoreDistributor.Business.Factories
 {
-    public class RandomFactory : IRandomFactory
+    internal sealed class RandomFactory : IRandomFactory
     {
         public Random Create()
         {
